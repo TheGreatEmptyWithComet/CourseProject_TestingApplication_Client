@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EXAM_QuizApplication.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="UsersDataFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Quiz data\\Users.txt</Value>
+    </Setting>
+    <Setting Name="StatDataFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Quiz data\\Statistic.txt</Value>
+    </Setting>
+    <Setting Name="QuizQuestionAmount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="TopResultAmount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="QuestionsTextDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Quiz data\\Questions\\Text</Value>
+    </Setting>
+    <Setting Name="CustomCategoryName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Custom</Value>
+    </Setting>
+    <Setting Name="TotalQuizScore" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="TimeForQuiz_minuts" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="TimeForQuiz_seconds" Type="System.String" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="CategoryImagesDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Quiz data\\Questions\\Images</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
