@@ -16,7 +16,7 @@ namespace TestingClientApp
         #region Events
         /****************************************************************************************/
         private Statistic statistic = new Statistic();
-        private QuestionDataBase QuestionDataBase  = new QuestionDataBase();
+        private QuestionDataBase QuestionDataBase = new QuestionDataBase();
         #endregion
 
 
@@ -24,9 +24,11 @@ namespace TestingClientApp
         /****************************************************************************************/
         private NetworkClient networkClient;
         public string UserLogin { get; set; }
-        public ListCollectionView QuestionForQuiz { get; private set; }
+        public ListCollectionView QuestionForQuiz { get; private set; }                                         //+++++++++
+        private List<Question> storedQuestions;                                                                 //+++++++++
+
         public int CorrectAnswersAmount { get; private set; } = 0;
-        public int UserScore { get; private set; } = 0;
+        public double UserScore { get; private set; } = 0;
         public int UserPlaseInGroup { get; private set; } = 0;
         public int CorrectAnswersPercentage { get; private set; } = 0;
         public List<UserStatRecord> UserStatData { get; private set; }
@@ -74,6 +76,28 @@ namespace TestingClientApp
             CurrentTest = TestsList.Where((t) => t.Id == testId).FirstOrDefault();
         }
 
+        public async Task PrepareQuizQuestion()
+        {
+            storedQuestions = null;
+
+            storedQuestions = await networkClient.GetTestQuestions(CurrentTest.Id);
+
+            // Add references to question that were removed from answers while converting to json
+            storedQuestions.ForEach((q) =>
+            {
+                foreach (Answer answer in q.Answers)
+                {
+                    answer.Question = q;
+                }
+            });
+
+            List<QuestionVM> questionsVM = storedQuestions.Select((q) => new QuestionVM(q)).ToList();
+
+            ICollectionView tempView = CollectionViewSource.GetDefaultView(questionsVM);
+            QuestionForQuiz = (ListCollectionView)tempView;
+        }
+
+
 
 
 
@@ -81,10 +105,10 @@ namespace TestingClientApp
         private void SetCategoriesList()
         {
             // get the category image names list
-            List<string> categoryImageNames = QuestionDataBase.CategoryImagesList.Select(i=>Path.GetFileNameWithoutExtension(i)).ToList();
+            List<string> categoryImageNames = QuestionDataBase.CategoryImagesList.Select(i => Path.GetFileNameWithoutExtension(i)).ToList();
 
             int imageNameListIndex;
-            
+
             foreach (var categoryName in QuestionDataBase.CategoryNamesList)
             {
                 if (categoryImageNames.Contains(categoryName))
@@ -99,34 +123,27 @@ namespace TestingClientApp
         }
 
         // Public methods
-        public async Task PrepareQuizQuestion()
-        {
-            List<Question> storedQuestions = await networkClient.GetTestQuestions(CurrentTest.Id);
-            
-            //List<StoredQuestionRecord> tempStoredQuestionList = QuestionDataBase.GetQuizQuestionList(QuestionCategoryName);--------------------------------------------------------
-            //List<QuizQuestionRecord> tempQuizQuestionList = new List<QuizQuestionRecord>(tempStoredQuestionList.Select(i => new QuizQuestionRecord(i)));----------------------------
 
-            ICollectionView tempView = CollectionViewSource.GetDefaultView(storedQuestions);
-            QuestionForQuiz = (ListCollectionView)tempView;
-        }
-        public void FinishQuiz()
+        public async void FinishQuiz()
         {
-            EstimateAnswers();
-            SaveStatistic();
-            SetUserPlaceInGroup();
+            UserScore = await networkClient.GetTestResult(storedQuestions);
+        
+            //EstimateAnswers();
+            //SaveStatistic();
+            //SetUserPlaceInGroup();
         }
         private void EstimateAnswers()
         {
             CorrectAnswersAmount = 0;
             bool isCorrectlyAnswered;
 
-            foreach(QuizQuestionRecord record in QuestionForQuiz)
+            foreach (QuizQuestionRecord record in QuestionForQuiz)
             {
                 isCorrectlyAnswered = true;
 
                 foreach (AnswerOption answer in record.AnswerOptions)
                 {
-                    if (answer.IsUserChecked!= answer.IsCorrect)
+                    if (answer.IsUserChecked != answer.IsCorrect)
                     {
                         isCorrectlyAnswered = false;
                         break;

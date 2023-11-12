@@ -13,8 +13,6 @@ using TestingServerApp;
 
 namespace TestingClientApp
 {
-    public enum RequestCode { Login, GetTests, GetAttempts, GetQuestions, SaveResults, GetStatistic, Logout }
-
     public class NetworkClient
     {
         private string serverHost;
@@ -107,11 +105,11 @@ namespace TestingClientApp
             {
                 try
                 {
-                    writer.Write((int)RequestCode.GetQuestions);
+                    writer.Write((int)RequestCode.StartTest);
                     writer.Write(testId);
 
                     string questionsAsJson = reader.ReadString();
-                    questions = JsonConvert.DeserializeObject<List<Question>>(questionsAsJson);
+                    questions = JsonConvert.DeserializeObject<List<Question>>(questionsAsJson, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
                     if (questions == null)
                     {
@@ -127,7 +125,34 @@ namespace TestingClientApp
             return questions;
         }
 
+        public async Task<double> GetTestResult(List<Question> questions)
+        {
+            double testResult = 0;
 
+            await Task.Run(() =>
+            {
+                try
+                {
+                    writer.Write((int)RequestCode.GetResult);
+
+                    // Send questions with user answers
+                    string questionsAsJson = JsonConvert.SerializeObject(questions, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+
+                    if (!string.IsNullOrEmpty(questionsAsJson))
+                    {
+                        writer.Write(questionsAsJson);
+                    }
+
+                    testResult = reader.ReadDouble();
+                }
+                catch
+                {
+                    Application.Current.Dispatcher.Invoke(() => ShowServerConnectionError());
+                }
+            });
+
+            return testResult;
+        }
 
 
 

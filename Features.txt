@@ -1,0 +1,4 @@
+- password hash + salt
+- log writer
+- images as referenses in db
+- json settings file

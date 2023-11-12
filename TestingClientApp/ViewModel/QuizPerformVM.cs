@@ -96,7 +96,7 @@ namespace TestingClientApp
             Timer.Tick += (s, e) => AtTimerTick();
         }
 
-        private async void StartTest()
+        private async void StartTest()//++++++++++++++++++++++++++++++++++++++++++++++++++++++
         {
             await Quiz.PrepareQuizQuestion();
             Quiz.QuestionForQuiz.MoveCurrentToFirst();
@@ -120,7 +120,7 @@ namespace TestingClientApp
                 Quiz.QuestionForQuiz.MoveCurrentToFirst();
             }
         }
-        private void FinishQuiz(bool dialogResult = false)
+        private void FinishQuiz(bool dialogResult = false)//+++++++++++++++++++++++++++++++++++++++++++++++++++++
         {
             if (dialogResult != true)
             {

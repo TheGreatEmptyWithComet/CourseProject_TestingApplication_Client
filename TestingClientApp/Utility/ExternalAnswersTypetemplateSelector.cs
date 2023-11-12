@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using TestingServerApp;
 
 namespace TestingClientApp
 {
@@ -15,7 +16,7 @@ namespace TestingClientApp
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is AnswerOption answer && answer.Type==AnswerType.MultipleAnswers)
+            if (item is AnswerVM answer && answer.MultipleAnswersAllowed == true)
             {
                 return MultipleQuestionsDateTemplate;
             }
