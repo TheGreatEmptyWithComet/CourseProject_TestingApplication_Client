@@ -28,7 +28,16 @@ namespace TestingClientApp
         private List<Question> storedQuestions;                                                                 //+++++++++
 
         public int CorrectAnswersAmount { get; private set; } = 0;
-        public double UserScore { get; private set; } = 0;
+        private double userScore;
+        public double UserScore
+        {
+            get => userScore;
+            private set
+            {
+                userScore = value;
+                NotifyPropertyChanged(nameof(UserScore));
+            }
+        }
         public int UserPlaseInGroup { get; private set; } = 0;
         public int CorrectAnswersPercentage { get; private set; } = 0;
         public List<UserStatRecord> UserStatData { get; private set; }
@@ -127,7 +136,7 @@ namespace TestingClientApp
         public async void FinishQuiz()
         {
             UserScore = await networkClient.GetTestResult(storedQuestions);
-        
+
             //EstimateAnswers();
             //SaveStatistic();
             //SetUserPlaceInGroup();
