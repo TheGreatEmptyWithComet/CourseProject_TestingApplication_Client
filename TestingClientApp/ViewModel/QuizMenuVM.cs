@@ -110,7 +110,7 @@ namespace TestingClientApp
             }
             else
             {
-                Quiz.SetCategoryStatistic();
+                //Quiz.SetCategoryStatistic();
                 CurrentPage = "QuizMenuCategoryStatistic.xaml";
             }
         }
@@ -123,7 +123,7 @@ namespace TestingClientApp
             switch (type)
             {
                 case StatisticType.User:
-                    Quiz.SetUserStatistic();
+                    //Quiz.SetUserStatistic();
                     CurrentPage = "QuizMenuUserStatistic.xaml";
                     break;
 
@@ -132,7 +132,7 @@ namespace TestingClientApp
                     break;
 
                 case StatisticType.General:
-                    Quiz.SetGeneralStatistic();
+                    //Quiz.SetGeneralStatistic();
                     CurrentPage = "QuizMenuGeneralStatistic.xaml";
                     break;
             }

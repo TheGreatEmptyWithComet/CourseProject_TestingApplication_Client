@@ -106,20 +106,6 @@
                             Command="{Binding SignupLoginVM.LogInCommand}">Log in</Button>
                     </Grid>
 
-                    <TextBlock HorizontalAlignment="Center" Foreground="#ffffff" FontSize="13">Don't have an account? 
-                        <Hyperlink Command="{Binding SignupLoginVM.LoginPageNavigationCommand}" CommandParameter="SignUp.xaml" FontWeight="Bold" FontSize="13">Sign up
-                            <Hyperlink.Style>
-                                <Style TargetType="{x:Type Hyperlink}">
-                                    <Setter Property="Foreground" Value="#ffffff"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Foreground" Value="#1ed760"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Hyperlink.Style>
-                        </Hyperlink></TextBlock>
-
                 </StackPanel>
 
             </Grid>

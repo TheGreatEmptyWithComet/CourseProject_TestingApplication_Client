@@ -125,9 +125,10 @@ namespace TestingClientApp
             return questions;
         }
 
-        public async Task<double> GetTestResult(List<Question> questions)
+        public async Task<Tuple<double,List<int>>> GetTestResult(List<Question> questions)
         {
             double testResult = 0;
+            List<int> userAnswerType = new List<int>();
 
             await Task.Run(() =>
             {
@@ -144,6 +145,13 @@ namespace TestingClientApp
                     }
 
                     testResult = reader.ReadDouble();
+                    string userAnswersAsJson = reader.ReadString();
+                    var buffer = JsonConvert.DeserializeObject<List<int>>(userAnswersAsJson);
+                    if (buffer != null)
+                    {
+                        userAnswerType = buffer;
+                    }
+
                 }
                 catch
                 {
@@ -151,7 +159,7 @@ namespace TestingClientApp
                 }
             });
 
-            return testResult;
+            return new Tuple<double, List<int>>(testResult, userAnswerType);
         }
 
 

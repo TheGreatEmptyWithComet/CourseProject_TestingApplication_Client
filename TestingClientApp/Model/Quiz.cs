@@ -11,12 +11,14 @@ using TestingServerApp;
 
 namespace TestingClientApp
 {
+    //public enum UserAnswerType { Correct, Incorrect, Partial }
+
     internal class Quiz : NotifyPropertyChangedHandler
     {
         #region Events
         /****************************************************************************************/
-        private Statistic statistic = new Statistic();
-        private QuestionDataBase QuestionDataBase = new QuestionDataBase();
+        //private Statistic statistic = new Statistic();
+        //private QuestionDataBase QuestionDataBase = new QuestionDataBase();
         #endregion
 
 
@@ -72,7 +74,7 @@ namespace TestingClientApp
         {
             this.networkClient = networkClient;
             this.TopResultsAmount = Properties.Settings.Default.TopResultAmount;
-            SetCategoriesList();
+            //SetCategoriesList();
         }
         #endregion
 
@@ -88,7 +90,9 @@ namespace TestingClientApp
         public async Task PrepareQuizQuestion()
         {
             storedQuestions = null;
+            UserScore = 0;
 
+            // get question from server
             storedQuestions = await networkClient.GetTestQuestions(CurrentTest.Id);
 
             // Add references to question that were removed from answers while converting to json
@@ -105,90 +109,103 @@ namespace TestingClientApp
             ICollectionView tempView = CollectionViewSource.GetDefaultView(questionsVM);
             QuestionForQuiz = (ListCollectionView)tempView;
         }
-
-
-
-
-
-        // Private methods
-        private void SetCategoriesList()
-        {
-            // get the category image names list
-            List<string> categoryImageNames = QuestionDataBase.CategoryImagesList.Select(i => Path.GetFileNameWithoutExtension(i)).ToList();
-
-            int imageNameListIndex;
-
-            foreach (var categoryName in QuestionDataBase.CategoryNamesList)
-            {
-                if (categoryImageNames.Contains(categoryName))
-                {
-                    // get the index of image name in the list
-                    imageNameListIndex = categoryImageNames.IndexOf(categoryName);
-                    // add the new category with image that meet the category name
-                    string fullImagePath = Path.GetFullPath(QuestionDataBase.CategoryImagesList[imageNameListIndex]);
-                    CategoriesList.Add(new QuestionCategory(categoryName, fullImagePath));
-                }
-            }
-        }
-
-        // Public methods
-
         public async void FinishQuiz()
         {
-            UserScore = await networkClient.GetTestResult(storedQuestions);
+            Tuple<double, List<int>> result = await networkClient.GetTestResult(storedQuestions);
+            UserScore = result.Item1;
+            WriteUserAnswerTypeToQuestions(result.Item2);
 
             //EstimateAnswers();
             //SaveStatistic();
             //SetUserPlaceInGroup();
         }
-        private void EstimateAnswers()
+        private void WriteUserAnswerTypeToQuestions(List<int> answers)
         {
-            CorrectAnswersAmount = 0;
-            bool isCorrectlyAnswered;
-
-            foreach (QuizQuestionRecord record in QuestionForQuiz)
+            for (int i = 0; i < storedQuestions.Count; ++i)
             {
-                isCorrectlyAnswered = true;
-
-                foreach (AnswerOption answer in record.AnswerOptions)
-                {
-                    if (answer.IsUserChecked != answer.IsCorrect)
-                    {
-                        isCorrectlyAnswered = false;
-                        break;
-                    }
-                }
-
-                record.IsCorrectlyAnswered = isCorrectlyAnswered;
-                if (isCorrectlyAnswered)
-                {
-                    ++CorrectAnswersAmount;
-                }
+                storedQuestions[i].UserAnswerType = (UserAnswerType)answers[i];
             }
+        }
 
-            UserScore = CorrectAnswersAmount * Properties.Settings.Default.TotalQuizScore / QuestionForQuiz.Count;
-        }
-        private void SaveStatistic()
-        {
-            statistic.AddNewRecord(new UserStatRecord(DateTime.Now, UserLogin, QuestionCategoryName, CorrectAnswersAmount, Properties.Settings.Default.QuizQuestionAmount, CorrectAnswersAmount * 100 / Properties.Settings.Default.QuizQuestionAmount));
-        }
-        private void SetUserPlaceInGroup()
-        {
-            UserPlaseInGroup = statistic.GetUserRating(UserLogin).Item1;
-            CorrectAnswersPercentage = statistic.GetUserRating(UserLogin).Item2;
-        }
-        public void SetUserStatistic()
-        {
-            UserStatData = statistic.GetUserStatistic(UserLogin);
-        }
-        public void SetCategoryStatistic()
-        {
-            UserStatData = statistic.GetCategoryStatistic(TopResultsAmount, QuestionCategoryName);
-        }
-        public void SetGeneralStatistic()
-        {
-            GeneralStatData = statistic.GetGeneralStatistic();
-        }
+
+
+
+        // Private methods
+        //private void SetCategoriesList()
+        //{
+        //    // get the category image names list
+        //    List<string> categoryImageNames = QuestionDataBase.CategoryImagesList.Select(i => Path.GetFileNameWithoutExtension(i)).ToList();
+
+        //    int imageNameListIndex;
+
+        //    foreach (var categoryName in QuestionDataBase.CategoryNamesList)
+        //    {
+        //        if (categoryImageNames.Contains(categoryName))
+        //        {
+        //            // get the index of image name in the list
+        //            imageNameListIndex = categoryImageNames.IndexOf(categoryName);
+        //            // add the new category with image that meet the category name
+        //            string fullImagePath = Path.GetFullPath(QuestionDataBase.CategoryImagesList[imageNameListIndex]);
+        //            CategoriesList.Add(new QuestionCategory(categoryName, fullImagePath));
+        //        }
+        //    }
+        //}
+
+        // Public methods
+
+
+
+
+
+
+        //private void EstimateAnswers()
+        //{
+        //    CorrectAnswersAmount = 0;
+        //    bool isCorrectlyAnswered;
+
+        //    foreach (QuizQuestionRecord record in QuestionForQuiz)
+        //    {
+        //        isCorrectlyAnswered = true;
+
+        //        foreach (AnswerOption answer in record.AnswerOptions)
+        //        {
+        //            if (answer.IsUserChecked != answer.IsCorrect)
+        //            {
+        //                isCorrectlyAnswered = false;
+        //                break;
+        //            }
+        //        }
+
+        //        record.IsCorrectlyAnswered = isCorrectlyAnswered;
+        //        if (isCorrectlyAnswered)
+        //        {
+        //            ++CorrectAnswersAmount;
+        //        }
+        //    }
+
+        //    UserScore = CorrectAnswersAmount * Properties.Settings.Default.TotalQuizScore / QuestionForQuiz.Count;
+        //}
+        //private void SaveStatistic()
+        //{
+        //    statistic.AddNewRecord(new UserStatRecord(DateTime.Now, UserLogin, QuestionCategoryName, CorrectAnswersAmount, Properties.Settings.Default.QuizQuestionAmount, CorrectAnswersAmount * 100 / Properties.Settings.Default.QuizQuestionAmount));
+        //}
+        //private void SetUserPlaceInGroup()
+        //{
+        //    UserPlaseInGroup = statistic.GetUserRating(UserLogin).Item1;
+        //    CorrectAnswersPercentage = statistic.GetUserRating(UserLogin).Item2;
+        //}
+        //public void SetUserStatistic()
+        //{
+        //    UserStatData = statistic.GetUserStatistic(UserLogin);
+        //}
+        //public void SetCategoryStatistic()
+        //{
+        //    UserStatData = statistic.GetCategoryStatistic(TopResultsAmount, QuestionCategoryName);
+        //}
+        //public void SetGeneralStatistic()
+        //{
+        //    GeneralStatData = statistic.GetGeneralStatistic();
+        //}
         #endregion
 
     }

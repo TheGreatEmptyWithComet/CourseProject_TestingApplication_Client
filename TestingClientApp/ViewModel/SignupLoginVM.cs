@@ -23,7 +23,7 @@ namespace TestingClientApp
         private NetworkClient networkClient;
         public Quiz Quiz { get; private set; }
         public User CurrentUser { get; set; } = new User();
-        public UserAccess UserAccess { get; set; } = new UserAccess();
+        //public UserAccess UserAccess { get; set; } = new UserAccess();
 
         private bool passwordIsVisible = false;
         public bool PasswordIsVisible
@@ -69,7 +69,7 @@ namespace TestingClientApp
             LoginPageNavigationCommand = new RelayCommand<string>(p => { OnCurrentPageChanged?.Invoke(p); PasswordIsVisible = false; });
             PasswordVisibilityChangeCommand = new RelayCommand(ChangePasswordVisibility);
             ResetPasswordVisibilityCommand = new RelayCommand(() => PasswordIsVisible = false);
-            SignUpCommand = new RelayCommand(SignUp);
+            //SignUpCommand = new RelayCommand(SignUp);
             LogInCommand = new RelayCommand(LogIn);
         }
 
@@ -85,17 +85,17 @@ namespace TestingClientApp
             }
         }
 
-        private void SignUp()
-        {
-            if (UserAccess.SignUp(CurrentUser))
-            {
-                StartNewQuiz();
-            }
-            else
-            {
-                ShowMessageWindow("Wrong registration data");
-            }
-        }
+        //private void SignUp()
+        //{
+        //    if (UserAccess.SignUp(CurrentUser))
+        //    {
+        //        StartNewQuiz();
+        //    }
+        //    else
+        //    {
+        //        ShowMessageWindow("Wrong registration data");
+        //    }
+        //}
         private async void LogIn()
         {
             if (await networkClient.Login(CurrentUser.Login, CurrentUser.Password))

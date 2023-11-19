@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TestingClientApp"
+      xmlns:server="clr-namespace:TestingServerApp;assembly=TestingServerApp"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="QuizDetailResults"
@@ -12,12 +13,12 @@
     <Page.Resources>
         <!-- Single answer template -->
         <DataTemplate x:Key="AnswerTemplate_Single">
-            <Border Height="40" BorderThickness="0 0 0 2" BorderBrush="WhiteSmoke">
+            <Border Height="40" BorderThickness="0 0 0 2" BorderBrush="AntiqueWhite">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Viewbox Height="25" Margin="0 0 15 0">
-                        <RadioButton IsChecked="{Binding IsUserChecked, Mode=TwoWay}" IsEnabled="True" GroupName="UserAnswers" Focusable="False" IsHitTestVisible="False"/>
+                        <RadioButton IsChecked="{Binding IsUserAnswered, Mode=TwoWay}" IsEnabled="True" GroupName="UserAnswers" Focusable="False" IsHitTestVisible="False"/>
                     </Viewbox>
-                    <TextBlock Text="{Binding Answer}" x:Name="item">
+                    <TextBlock Text="{Binding Text}" x:Name="item">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Style_AnswerOptionTextBlock_White}">
                                 <Style.Triggers>
@@ -34,12 +35,12 @@
 
         <!-- Multiple answers template -->
         <DataTemplate x:Key="AnswerTemplate_Multiple">
-            <Border Height="40" BorderThickness="0 0 0 2" BorderBrush="WhiteSmoke">
+            <Border Height="40" BorderThickness="0 0 0 2" BorderBrush="AntiqueWhite">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Viewbox Height="25" Margin="0 0 15 0">
-                        <CheckBox IsChecked="{Binding IsUserChecked, Mode=TwoWay}" IsEnabled="True" Focusable="False" IsHitTestVisible="False" />
+                        <CheckBox IsChecked="{Binding IsUserAnswered, Mode=TwoWay}" IsEnabled="True" Focusable="False" IsHitTestVisible="False" />
                     </Viewbox>
-                    <TextBlock Text="{Binding Answer}" x:Name="item">
+                    <TextBlock Text="{Binding Text}" x:Name="item">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Style_AnswerOptionTextBlock_White}">
                                 <Style.Triggers>
@@ -72,8 +73,11 @@
                         <Style TargetType="{x:Type Image}">
                             <Setter Property="Source" Value="/Images/CorrectAnswer.png"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/IsCorrectlyAnswered}" Value="False">
+                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/UserAnswerType}" Value="{x:Static server:UserAnswerType.Incorrect}">
                                     <Setter Property="Source" Value="/Images/WrongAnswer.png"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/UserAnswerType}" Value="{x:Static server:UserAnswerType.Partial}">
+                                    <Setter Property="Source" Value="/Images/PartialAnswer.png"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -86,8 +90,11 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Text" Value="Correct"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/IsCorrectlyAnswered}" Value="False">
+                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/UserAnswerType}" Value="{x:Static server:UserAnswerType.Incorrect}">
                                     <Setter Property="Text" Value="Incorrect"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding QuizPerformVM.Quiz.QuestionForQuiz/UserAnswerType}" Value="{x:Static server:UserAnswerType.Partial}">
+                                    <Setter Property="Text" Value="Partial"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -140,7 +147,7 @@
         <Border Background="#ffffff" CornerRadius="5" Margin="7 7 7 7" Padding="7" >
             <StackPanel  Orientation="Vertical" Width="700" HorizontalAlignment="Center" Margin="0 10 0 0">
                 <!-- Question -->
-                <TextBlock Text="{Binding QuizPerformVM.Quiz.QuestionForQuiz/Question}"
+                <TextBlock Text="{Binding QuizPerformVM.Quiz.QuestionForQuiz/Text}"
                            FontSize="26"
                            HorizontalAlignment="Center"
                            TextAlignment="Center"
@@ -151,7 +158,7 @@
 
                 <!-- Answer options -->
                 <ScrollViewer VerticalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding QuizPerformVM.Quiz.QuestionForQuiz/AnswerOptions}" ItemTemplateSelector="{DynamicResource externalAnswersTypetemplateSelector}"/>
+                    <ItemsControl ItemsSource="{Binding QuizPerformVM.Quiz.QuestionForQuiz/Answers}" ItemTemplateSelector="{DynamicResource externalAnswersTypetemplateSelector}"/>
                 </ScrollViewer>
             </StackPanel>
         </Border>

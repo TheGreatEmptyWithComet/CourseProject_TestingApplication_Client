@@ -22,11 +22,6 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
-                    Style="{DynamicResource Style_Button_Rounded_Black}" 
-                    Command="{Binding SignupLoginVM.LoginPageNavigationCommand}" 
-                    CommandParameter="SignUp.xaml">Sign up</Button>
-
             <Button Grid.Column="1"
                     Style="{DynamicResource Style_Button_Rounded_White}" 
                     Command="{Binding SignupLoginVM.LoginPageNavigationCommand}" 

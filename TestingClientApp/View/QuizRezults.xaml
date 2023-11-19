@@ -38,9 +38,9 @@
             <!-- Score -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="0 50 0 50">
                 <TextBlock Text="Your score is:" Style="{DynamicResource Style_InfoTextBlock_White}" Margin="0 0 8 0" FontSize="26"/>
-                <TextBlock Text="{Binding Quiz.UserScore, StringFormat='#.0'}" Style="{DynamicResource Style_InfoTextBlock_Green}" Margin="0 0 8 0" FontSize="26"/>
+                <TextBlock Text="{Binding Quiz.UserScore, StringFormat='0.0'}" Style="{DynamicResource Style_InfoTextBlock_Green}" Margin="0 0 8 0" FontSize="26"/>
                 <TextBlock Text="/" Style="{DynamicResource Style_InfoTextBlock_White}" Margin="0 0 5 0" FontSize="26"/>
-                <TextBlock Text="{Binding TotalQuizScore, Source={ x:Static properties:Settings.Default}}" Style="{DynamicResource Style_InfoTextBlock_Green}" FontSize="26"/>
+                <TextBlock Text="{Binding Quiz.CurrentTest.MaxTestScores}" Style="{DynamicResource Style_InfoTextBlock_Green}" FontSize="26"/>
             </StackPanel>
 
             <!-- Correct answers -->

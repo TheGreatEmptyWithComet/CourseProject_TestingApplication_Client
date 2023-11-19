@@ -74,7 +74,6 @@ namespace TestingClientApp
         {
             this.Quiz = quiz;
             this.networkClient = networkClient;
-            TimeProgressMaxValueInSecunds = Properties.Settings.Default.TimeForQuiz_minuts * 60;
             InitTimer();
             InitCommands();
         }
@@ -98,9 +97,13 @@ namespace TestingClientApp
 
         private async void StartTest()//++++++++++++++++++++++++++++++++++++++++++++++++++++++
         {
+            TimeProgressMaxValueInSecunds = Quiz.CurrentTest.MinutsForTest * 60;
+            TimeProgressInSecunds = 0;
+
             await Quiz.PrepareQuizQuestion();
+            
             Quiz.QuestionForQuiz.MoveCurrentToFirst();
-            TimeLeft = TimeSpan.FromMinutes(Properties.Settings.Default.TimeForQuiz_minuts);
+            TimeLeft = TimeSpan.FromMinutes(Quiz.CurrentTest.MinutsForTest);
             Timer.Start();
             OnCurrentPageChanged?.Invoke("QuizPerform.xaml");
         }
