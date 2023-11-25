@@ -19,10 +19,9 @@ namespace TestingClientApp
         /****************************************************************************************/
         private NetworkClient networkClient;
         public string UserLogin { get; set; }
-        public ListCollectionView QuestionForQuiz { get; private set; }                                         //+++++++++
-        private List<Question> storedQuestions;                                                                 //+++++++++
+        public ListCollectionView QuestionForQuiz { get; private set; }                                         
+        private List<Question> storedQuestions;                                                                 
 
-        public int CorrectAnswersAmount { get; private set; } = 0;
         private double userScore;
         public double UserScore
         {
@@ -33,13 +32,8 @@ namespace TestingClientApp
                 NotifyPropertyChanged(nameof(UserScore));
             }
         }
-        public int UserPlaseInGroup { get; private set; } = 0;
-        public int CorrectAnswersPercentage { get; private set; } = 0;
-        public List<UserStatRecord> UserStatData { get; private set; }
-        public List<GeneralStatRecord> GeneralStatData { get; private set; }
-        public List<QuestionCategory> CategoriesList { get; private set; } = new List<QuestionCategory>();              //---------
-        public List<TestInfo> TestsList { get; set; } = new List<TestInfo>();                                           //+++++++++
-        public TestInfo CurrentTest { get; set; }                                                                      //+++++++++
+        public List<TestInfo> TestsList { get; set; } = new List<TestInfo>();                                           
+        public TestInfo CurrentTest { get; set; }                                                                      
 
 
         public string QuestionCategoryName { get; set; }

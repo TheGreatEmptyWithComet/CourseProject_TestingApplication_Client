@@ -103,12 +103,12 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="80*" />
             </Grid.ColumnDefinitions>
 
             <!-- Left menu buttons -->
-            <Grid Grid.Column="0">
+            <Grid Grid.Column="0" Visibility="Collapsed">
                 <Border Background="#121212" CornerRadius="5" Margin="7 7 7 7" Padding="5">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
 
