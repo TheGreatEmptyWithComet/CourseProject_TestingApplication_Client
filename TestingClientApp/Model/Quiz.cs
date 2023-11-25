@@ -15,13 +15,6 @@ namespace TestingClientApp
 
     internal class Quiz : NotifyPropertyChangedHandler
     {
-        #region Events
-        /****************************************************************************************/
-        //private Statistic statistic = new Statistic();
-        //private QuestionDataBase QuestionDataBase = new QuestionDataBase();
-        #endregion
-
-
         #region Properties
         /****************************************************************************************/
         private NetworkClient networkClient;
@@ -73,7 +66,7 @@ namespace TestingClientApp
         public Quiz(NetworkClient networkClient)
         {
             this.networkClient = networkClient;
-            this.TopResultsAmount = Properties.Settings.Default.TopResultAmount;
+            this.TopResultsAmount = 20;
             //SetCategoriesList();
         }
         #endregion
@@ -114,10 +107,6 @@ namespace TestingClientApp
             Tuple<double, List<int>> result = await networkClient.GetTestResult(storedQuestions);
             UserScore = result.Item1;
             WriteUserAnswerTypeToQuestions(result.Item2);
-
-            //EstimateAnswers();
-            //SaveStatistic();
-            //SetUserPlaceInGroup();
         }
         private void WriteUserAnswerTypeToQuestions(List<int> answers)
         {
@@ -127,85 +116,6 @@ namespace TestingClientApp
             }
         }
 
-
-
-
-        // Private methods
-        //private void SetCategoriesList()
-        //{
-        //    // get the category image names list
-        //    List<string> categoryImageNames = QuestionDataBase.CategoryImagesList.Select(i => Path.GetFileNameWithoutExtension(i)).ToList();
-
-        //    int imageNameListIndex;
-
-        //    foreach (var categoryName in QuestionDataBase.CategoryNamesList)
-        //    {
-        //        if (categoryImageNames.Contains(categoryName))
-        //        {
-        //            // get the index of image name in the list
-        //            imageNameListIndex = categoryImageNames.IndexOf(categoryName);
-        //            // add the new category with image that meet the category name
-        //            string fullImagePath = Path.GetFullPath(QuestionDataBase.CategoryImagesList[imageNameListIndex]);
-        //            CategoriesList.Add(new QuestionCategory(categoryName, fullImagePath));
-        //        }
-        //    }
-        //}
-
-        // Public methods
-
-
-
-
-
-
-        //private void EstimateAnswers()
-        //{
-        //    CorrectAnswersAmount = 0;
-        //    bool isCorrectlyAnswered;
-
-        //    foreach (QuizQuestionRecord record in QuestionForQuiz)
-        //    {
-        //        isCorrectlyAnswered = true;
-
-        //        foreach (AnswerOption answer in record.AnswerOptions)
-        //        {
-        //            if (answer.IsUserChecked != answer.IsCorrect)
-        //            {
-        //                isCorrectlyAnswered = false;
-        //                break;
-        //            }
-        //        }
-
-        //        record.IsCorrectlyAnswered = isCorrectlyAnswered;
-        //        if (isCorrectlyAnswered)
-        //        {
-        //            ++CorrectAnswersAmount;
-        //        }
-        //    }
-
-        //    UserScore = CorrectAnswersAmount * Properties.Settings.Default.TotalQuizScore / QuestionForQuiz.Count;
-        //}
-        //private void SaveStatistic()
-        //{
-        //    statistic.AddNewRecord(new UserStatRecord(DateTime.Now, UserLogin, QuestionCategoryName, CorrectAnswersAmount, Properties.Settings.Default.QuizQuestionAmount, CorrectAnswersAmount * 100 / Properties.Settings.Default.QuizQuestionAmount));
-        //}
-        //private void SetUserPlaceInGroup()
-        //{
-        //    UserPlaseInGroup = statistic.GetUserRating(UserLogin).Item1;
-        //    CorrectAnswersPercentage = statistic.GetUserRating(UserLogin).Item2;
-        //}
-        //public void SetUserStatistic()
-        //{
-        //    UserStatData = statistic.GetUserStatistic(UserLogin);
-        //}
-        //public void SetCategoryStatistic()
-        //{
-        //    UserStatData = statistic.GetCategoryStatistic(TopResultsAmount, QuestionCategoryName);
-        //}
-        //public void SetGeneralStatistic()
-        //{
-        //    GeneralStatData = statistic.GetGeneralStatistic();
-        //}
         #endregion
 
     }

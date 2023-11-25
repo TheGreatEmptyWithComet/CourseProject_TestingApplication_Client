@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Text="QUIZ IS FINISHED!"
+                   Text="TEST IS FINISHED!"
                    HorizontalAlignment="Center"
                    FontSize="32"
                    Margin="0 20 0 20"
@@ -28,12 +28,12 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 10 0 0" Grid.Row="1">
             <!-- Category name -->
             <TextBlock HorizontalAlignment="Center" 
-                       Style="{DynamicResource Style_InfoTextBlock_White}">Category:</TextBlock>
+                       Style="{DynamicResource Style_InfoTextBlock_White}">Test:</TextBlock>
 
             <TextBlock HorizontalAlignment="Center"
                        Margin="0 5 0 0"
                        Style="{DynamicResource Style_InfoHeaderTextBlock_White}" 
-                       Text="{Binding Quiz.QuestionCategoryName}"/>
+                       Text="{Binding Quiz.CurrentTest.Name}"/>
 
             <!-- Score -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="0 50 0 50">
@@ -43,22 +43,9 @@
                 <TextBlock Text="{Binding Quiz.CurrentTest.MaxTestScores}" Style="{DynamicResource Style_InfoTextBlock_Green}" FontSize="26"/>
             </StackPanel>
 
-            <!-- Correct answers -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
-                <TextBlock HorizontalAlignment="Right" Style="{DynamicResource Style_InfoTextBlock_White}" Margin="0 0 5 0">Correct answers:</TextBlock>
-                <TextBlock Style="{DynamicResource Style_InfoTextBlock_White}" Text="{Binding Quiz.CorrectAnswersAmount, StringFormat='\{0} /'}" Margin="0 0 5 0"/>
-                <TextBlock Style="{DynamicResource Style_InfoTextBlock_White}" Text="{Binding Quiz.QuestionForQuiz.Count}"/>
-            </StackPanel>
-
-            <!-- Place in group -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 30">
-                <TextBlock HorizontalAlignment="Right" Style="{DynamicResource Style_InfoTextBlock_White}" Margin="0 0 5 0">Place in group:</TextBlock>
-                <TextBlock Style="{DynamicResource Style_InfoTextBlock_White}" Text="{Binding Quiz.UserPlaseInGroup}" Margin="0 0 5 0"/>
-                <TextBlock Style="{DynamicResource Style_InfoTextBlock_White}" Text="{Binding Quiz.CorrectAnswersPercentage, StringFormat=' with {0} % of correct answers'}"/>
-            </StackPanel>
 
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0">
                 <!-- Exit button -->
                 <Button Command="{Binding PageNavigationCommand}" 
                         CommandParameter="QuizMenu.xaml"
